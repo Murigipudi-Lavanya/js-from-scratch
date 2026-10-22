@@ -10,7 +10,7 @@ console.log(score.sort());
 let nums = [10,1,21,2];
 nums.sort();
 console.log(nums);
-// Natural Sorting, Lexicographic Sort
+// Natural Sorting, Lexicographic Sort compares 1st charcter then 2nd soon
 
 
 let n = [11,-11];
