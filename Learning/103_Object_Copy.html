@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>103 - JavaScript Object References</title>
+  <style>
+    :root {
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: #172033;
+      background: #f3f6fc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 32px 16px;
+    }
+
+    main {
+      max-width: 820px;
+      margin: auto;
+      padding: 30px;
+      border: 1px solid #dfe6f2;
+      border-radius: 18px;
+      background: white;
+      box-shadow: 0 14px 36px #22365c18;
+    }
+
+    h1, h2 {
+      color: #172554;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    p, li {
+      line-height: 1.65;
+    }
+
+    .lead {
+      color: #45516a;
+      font-size: 1.08rem;
+    }
+
+    .diagram {
+      margin: 24px 0;
+      padding: 16px;
+      overflow-x: auto;
+      border: 1px solid #e1e8f5;
+      border-radius: 14px;
+      background: #f8faff;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      min-width: 540px;
+      height: auto;
+    }
+
+    pre {
+      overflow-x: auto;
+      padding: 18px;
+      border-radius: 12px;
+      background: #111827;
+      color: #e5edff;
+      font: 0.95rem/1.7 Consolas, "Courier New", monospace;
+    }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #edf2ff;
+      color: #293d92;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .note {
+      padding: 14px 18px;
+      border-left: 4px solid #5b6ee1;
+      border-radius: 8px;
+      background: #eef1ff;
+    }
+
+    @media (max-width: 600px) {
+      main {
+        padding: 20px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Two names, one object</h1>
+    <p class="lead">
+      <code>a</code> and <code>b</code> are two ways to reach the same object.
+      Changing it through either name changes what both names see.
+    </p>
+
+    <section class="diagram" aria-label="Diagram of two variables pointing to one shared object">
+      <svg viewBox="0 0 720 300" role="img" aria-labelledby="diagram-title diagram-desc">
+        <title id="diagram-title">a and b point to one shared object</title>
+        <desc id="diagram-desc">After b.status is set to fail, both a and b point to the same object with status fail.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#6674d9"></path>
+          </marker>
+        </defs>
+        <text x="360" y="34" text-anchor="middle" fill="#4a5670" font-size="17" font-weight="600">After: b.status = "fail"</text>
+        <rect x="35" y="72" width="130" height="62" rx="14" fill="#e7edff" stroke="#9eafff" stroke-width="2"></rect>
+        <text x="100" y="111" text-anchor="middle" fill="#24377e" font-size="24" font-weight="700">a</text>
+        <rect x="35" y="175" width="130" height="62" rx="14" fill="#e7edff" stroke="#9eafff" stroke-width="2"></rect>
+        <text x="100" y="214" text-anchor="middle" fill="#24377e" font-size="24" font-weight="700">b</text>
+        <path d="M165 103 C240 103 240 143 315 143" fill="none" stroke="#6674d9" stroke-width="4" marker-end="url(#arrow)"></path>
+        <path d="M165 206 C240 206 240 166 315 166" fill="none" stroke="#6674d9" stroke-width="4" marker-end="url(#arrow)"></path>
+        <rect x="330" y="91" width="350" height="132" rx="18" fill="#e8fbf2" stroke="#55b88a" stroke-width="2"></rect>
+        <text x="505" y="129" text-anchor="middle" fill="#176243" font-size="18" font-weight="700">One shared object</text>
+        <line x1="360" y1="144" x2="650" y2="144" stroke="#bcebd4" stroke-width="2"></line>
+        <text x="370" y="181" fill="#34445a" font-size="18">status:</text>
+        <text x="640" y="181" text-anchor="end" fill="#b42318" font-size="20" font-weight="700">"fail"</text>
+        <text x="360" y="270" text-anchor="middle" fill="#4a5670" font-size="16">Both arrows lead to the same box, not separate copies.</text>
+      </svg>
+    </section>
+
+    <h2>Step by step</h2>
+    <pre><code>let a = { status: "pass" };
+
+let b = a;
+b.status = "fail";
+
+console.log(b.status); // "fail"
+console.log(a.status); // "fail"</code></pre>
+    <ol>
+      <li><code>let a = { status: "pass" }</code> creates one object and makes <code>a</code> refer to it.</li>
+      <li><code>let b = a</code> copies the reference - the way to find the object - not the object itself.</li>
+      <li><code>b.status = "fail"</code> changes the shared object's status.</li>
+      <li>Both logs show <code>"fail"</code> because <code>a</code> and <code>b</code> reach that same object.</li>
+    </ol>
+
+    <p class="note">
+      Think of <code>a</code> and <code>b</code> as two labels pointing to the
+      same box. If you change what's inside using either label, the change is
+      visible through the other one too.
+    </p>
+    <p>
+      For this simple object, <code>let b = { ...a };</code> creates a separate
+      shallow copy. Then changing <code>b.status</code> does not change
+      <code>a.status</code>.
+    </p>
+  </main>
+</body>
+</html>
