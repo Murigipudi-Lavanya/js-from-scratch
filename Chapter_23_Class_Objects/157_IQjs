@@ -1,0 +1,7 @@
+// class Bad { 
+//     constructor(a) {} 
+//     constructor(b) {} 
+// }
+
+// Only one constructor is allowed in a class. If you try to define 
+// multiple constructors, it will result in a syntax error.
